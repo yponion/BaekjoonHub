@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Stack;
 
 public class Main {
     static int n;
@@ -11,19 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
         process();
-//        test();
-    }
-
-    public static void test() {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            list.add(i);
-        }
-        Collections.shuffle(list);
-        System.out.println(10);
-        for (int i : list) {
-            System.out.print(i + " ");
-        }
     }
 
     public static void process() {
@@ -38,35 +25,27 @@ public class Main {
         }
         n = nTmp[0];
 
-        // 대기열을 순회하며 번호가 맞으면 라인을 통과, 맞지 않으면 stack으로 이동
+        // 대기열을 순회하며 번호가 맞으면 라인을 통과, 맞지 않으면 스택의 번호 조회, 스택의 번호도 맞지 않으면 stack으로 이동
         for (int i = 0; i < ary.length; i++) {
             if (ary[i] == cnt) {
                 cnt++;
-//                System.out.println("현재 cnt = " + cnt + ", list에서 나온 값 = " + ary[i] + " 통과");
             } else if (!stack.empty() && stack.peek() == cnt) {
-//                System.out.println("현재 cnt = " + cnt + ", stack에서 나온 값 = " + stack.peek() + " 통과");
                 stack.pop();
                 cnt++;
                 i--;
             } else {
-//                System.out.println("현재 cnt = " + cnt + ", list에서 나온 값 = " + ary[i] + " stack");
                 stack.push(ary[i]);
             }
         }
-
-//        System.out.println("--스택--");
-//        System.out.println(stack);
-
+        
         // stack이 비어있다면 실행안함
         // stack을 순서대로 빼내며 순서가 맞으면 라인을 통과, 맞지 않으면 "Sad" 종료
         boolean flag = true;
         while (!stack.empty()) {
             int tmp = stack.pop();
             if (tmp == cnt) {
-//                System.out.println("현재 cnt = " + cnt + ", stack에서 나온 값 = " + tmp + " 통과");
                 cnt++;
             } else {
-//                System.out.println("현재 cnt = " + cnt + ", stack에서 나온 값 = " + tmp + " 종료");
                 flag = false;
                 break;
             }
