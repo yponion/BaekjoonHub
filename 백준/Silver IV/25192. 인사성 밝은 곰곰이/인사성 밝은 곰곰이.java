@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -12,7 +10,6 @@ public class Main {
 
     public static void process() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         HashSet<String> set = new HashSet<>();
         String input = "";
         int n, cnt = 0;
@@ -32,12 +29,9 @@ public class Main {
                 }
             }
             br.close();
-
-            bw.write(String.valueOf(cnt));
-            bw.flush();
-            bw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(cnt);
     }
 }
