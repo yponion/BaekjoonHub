@@ -5,13 +5,18 @@ const input = require("fs")
   .split("\n")
   .map(Number);
 
-const sortedNumber = input.slice(1).sort((a, b) => a - b);
 const dif = [];
-for (let i = 1; i < sortedNumber.length; i++) {
-  dif.push(sortedNumber[i] - sortedNumber[i - 1]);
-}
+const sortedNumber = input.slice(1).sort((a, b) => a - b);
+sortedNumber.forEach((v, i) => {
+  if (i > 0) {
+    dif.push(v - sortedNumber[i - 1]);
+  }
+});
 
-// 비재귀적 GCD
+// const euclidean = (a, b) => { // 런타임 에러 (StackSizeExceeded)
+//   if (b === 0) return a;
+//   return euclidean(b, a % b);
+// };
 const euclidean = (a, b) => {
   while (b !== 0) {
     [a, b] = [b, a % b];
@@ -19,26 +24,36 @@ const euclidean = (a, b) => {
   return a;
 };
 
-// GCD 계산
 let gcd = dif[0];
 for (let i = 1; i < dif.length; i++) {
   gcd = euclidean(gcd, dif[i]);
 }
 
-// 약수 구하기 최적화
 const getDivisors = (n) => {
-  const divisors = [];
-  for (let i = 1; i <= Math.sqrt(n); i++) {
-    if (n % i === 0) {
-      divisors.push(i);
-      if (i !== n / i) divisors.push(n / i);
-    }
-  }
-  return divisors.sort((a, b) => a - b);
+  const front = [];
+  const mid = Math.sqrt(n);
+  for (let i = 1; i < mid; i++) if (n % i === 0) front.push(i);
+  const back = front.map((v) => n / v).reverse();
+  if (n % mid === 0) return [...front, mid, ...back];
+  else return [...front, ...back];
 };
 
-// 약수에서 1 제외하고 출력
-const answer = getDivisors(gcd)
-  .filter((v) => v !== 1)
-  .join(" ");
+// const getDivisors = (n) => {
+//   const divisors = [];
+//   for (let i = 1; i <= Math.sqrt(n); i++) {
+//     if (n % i === 0) {
+//       divisors.push(i);
+//       if (i !== n / i) {
+//         divisors.push(n / i);
+//       }
+//     }
+//   }
+//   divisors.sort((a, b) => a - b);
+//   return divisors;
+// };
+
+const divisors = getDivisors(gcd);
+const remove1 = divisors[0] === 1 ? divisors.slice(1) : divisors;
+const answer = remove1.join(" ");
+
 console.log(answer);
